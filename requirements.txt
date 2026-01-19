@@ -1,0 +1,6 @@
+Flask
+flask-cors
+flask-sqlalchemy
+Pillow
+numpy
+tensorflow==2.11.0    # or the TensorFlow version you trained with
