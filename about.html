@@ -1,0 +1,66 @@
+<!-- frontend/about.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>LiveGuard AI — About</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand"><div class="logo">LG</div><div><div style="font-weight:800">LiveGuard AI</div><div style="color:var(--muted)">About</div></div></div>
+    <div class="nav">
+      <a href="index.html">Live</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="collection.html">Data</a>
+      <a href="logs.html">Logs</a>
+      <a href="about.html" class="active">About</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>LiveGuard AI</h3>
+    <p>Advanced CNN-based face liveness detection system trained on multiple attack datasets.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="card" style="background:transparent;padding:12px">
+        <h4>System Overview</h4>
+        <p>LiveGuard AI is a state-of-the-art face anti-spoofing system designed to detect and prevent presentation attacks including printed photos, replay videos, and 3D masks. The system uses a CNN model (ResNet-50 recommended) trained across CASIA FASD, ReplayAttack and 3D-mask datasets to improve cross-dataset generalization.</p>
+      </div>
+
+      <div class="card" style="background:transparent;padding:12px">
+        <h4>Training Datasets</h4>
+        <ul>
+          <li>CASIA FASD — print & replay</li>
+          <li>ReplayAttack — replay video attacks</li>
+          <li>3D Mask Dataset(s) — physical mask attacks</li>
+        </ul>
+      </div>
+
+      <div class="card" style="background:transparent;padding:12px">
+        <h4>Key Features</h4>
+        <ul>
+          <li>Multi-attack detection (print, replay, 3D mask)</li>
+          <li>Cross-dataset generalization</li>
+          <li>Realtime processing (local inference)</li>
+          <li>Logging, analytics & export</li>
+        </ul>
+      </div>
+
+      <div class="card" style="background:transparent;padding:12px">
+        <h4>Technical Specs (example)</h4>
+        <pre style="white-space:pre-wrap;font-size:13px">
+Model: ResNet-50
+Input: 224x224 RGB
+Output: live / spoof (plus attack type)
+Performance target: high accuracy on combined datasets
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">This demo uses a dummy predictor by default — replace backend/models/model.pth with your trained model for real inference.</div>
+</div>
+</body>
+</html>

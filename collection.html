@@ -1,0 +1,89 @@
+<!-- frontend/collection.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>LiveGuard AI — Data Collection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand"><div class="logo">LG</div><div><div style="font-weight:800">LiveGuard AI</div><div style="color:var(--muted)">Data Collection</div></div></div>
+    <div class="nav">
+      <a href="index.html">Live</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="collection.html" class="active">Data</a>
+      <a href="logs.html">Logs</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Dataset & Collected Images</h3>
+    <div class="small-grid">
+      <div class="stat"><div class="num" id="totalImgs">0</div><div class="label">Total Images</div></div>
+      <div class="stat"><div class="num" id="totalLive">0</div><div class="label">Live Faces</div></div>
+      <div class="stat"><div class="num" id="totalSpoof">0</div><div class="label">Spoofs</div></div>
+    </div>
+
+    <div style="margin-top:12px">
+      <h4>Action</h4>
+      <div style="display:flex;gap:8px">
+        <button id="exportBtn" class="btn">Export CSV</button>
+        <button id="refreshBtn" class="btn secondary">Refresh Stats</button>
+      </div>
+    </div>
+
+    <div style="margin-top:14px">
+      <h4>Sample Images</h4>
+      <div id="sampleGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
+    </div>
+  </div>
+
+  <div class="footer">Use this page to manage and export collected dataset examples for training.</div>
+</div>
+
+<script src="common.js"></script>
+<script>
+async function refresh(){
+  const s = await fetchSummary();
+  document.getElementById('totalImgs').innerText = s.total;
+  document.getElementById('totalLive').innerText = s.live;
+  document.getElementById('totalSpoof').innerText = s.spoof;
+
+  // load some sample images
+  try{
+    const logs = await fetch('http://127.0.0.1:5000/api/logs?limit=9');
+    const j = await logs.json();
+    const grid = document.getElementById('sampleGrid');
+    grid.innerHTML = '';
+    j.rows.forEach(r=>{
+      const img=document.createElement('img');
+      img.src=`http://127.0.0.1:5000/uploads/${r.image_path.split('/').pop()}`;
+      img.style.width='100%'; img.style.height='120px'; img.style.objectFit='cover'; img.style.borderRadius='6px';
+      grid.appendChild(img);
+    });
+  }catch(e){}
+}
+
+document.getElementById('refreshBtn').onclick = refresh;
+document.getElementById('exportBtn').onclick = async ()=>{
+  // simple export: request logs and build CSV client-side
+  const res = await fetch('http://127.0.0.1:5000/api/logs?limit=1000');
+  const j = await res.json();
+  const rows = j.rows;
+  let csv = 'id,timestamp,prediction,confidence,attack_type,processing_ms,image_path\n';
+  rows.forEach(r=>{
+    csv += `${r.id},${r.timestamp},${r.prediction},${r.confidence},${r.attack_type},${r.processing_time_ms},${r.image_path}\n`;
+  });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'detections_export.csv'; a.click();
+  URL.revokeObjectURL(url);
+};
+
+refresh();
+</script>
+</body>
+</html>

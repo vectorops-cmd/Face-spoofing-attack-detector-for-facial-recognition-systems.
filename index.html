@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>FACE SPOOFING — Live Face Detection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <header class="header">
+    <div class="brand">
+      <div class="logo">LG</div>
+      <div>
+        <div class="brand-name">FACE SPOOFING</div>
+        <div class="brand-sub">Advanced CNN-based face liveness detection</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="index.html" class="active">Live</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="collection.html">Data</a>
+
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <div class="grid">
+    <!-- Live Detection Card -->
+    <div class="card">
+      <h3>Live Face Detection</h3>
+      <div class="capture-area">
+        <video id="video" autoplay playsinline muted></video>
+        <div class="controls">
+          <button id="startBtn" class="btn">Start Camera</button>
+          <button id="snapBtn" class="btn">Capture</button>
+          <input id="uploadInput" type="file" accept="image/*" hidden>
+          <button id="uploadBtn" class="btn secondary">Upload Image</button>
+        </div>
+        <div class="tip">Center your face, ensure good lighting, avoid glare.</div>
+        <img id="previewImg" alt="Preview">
+        <div id="metaBox"></div>
+        <div id="result"></div>
+      </div>
+    </div>
+
+    <!-- Recent Detections Card -->
+    <div class="card">
+      <h4>Recent Detections</h4>
+      <div id="recentList" class="recent-list"></div>
+    </div>
+  </div>
+
+  <!-- Detection Info Card -->
+  <div class="card">
+    <h3>Detection Info</h3>
+    <div class="info-grid">
+      <div>
+        <h4>Attack Types Detected:</h4>
+        <ul>
+          <li>Print Attacks</li>
+          <li>Video Replay Attacks</li>
+          <li>3D Mask Attacks</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Model Details:</h4>
+        <ul>
+          <li>Architecture: CNN (ResNet-50)</li>
+          <li>Training: Multi-dataset</li>
+          <li>Target Accuracy: 98.7%</li>
+          <li>Webcam Captures: 97% live detection</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage Tips -->
+  <div class="card">
+    <h4>Usage Tips</h4>
+    <ul class="usage-tips">
+      <li>✓ Ensure good lighting conditions</li>
+      <li>✓ Face should be centered and clear</li>
+      <li>✓ Remove sunglasses or masks</li>
+      <li>✓ Movement is natural – helps verify liveness</li>
+      <li>✓ Webcam captures are most accurate</li>
+    </ul>
+  </div>
+
+  <footer class="footer">
+    LiveGuard AI • Local demo • Model: <span id="modelStatus">checking...</span>
+  </footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

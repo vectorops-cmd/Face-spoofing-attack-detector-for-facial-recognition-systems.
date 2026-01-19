@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>LiveGuard AI — Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand">
+      <div class="logo">LG</div>
+      <div>
+        <div style="font-weight:800">LiveGuard AI</div>
+        <div style="color:var(--muted);font-size:12px">Dashboard</div>
+      </div>
+    </div>
+    <div class="nav">
+      <a href="index.html">Live</a>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="collection.html">Data</a>
+      <a href="logs.html">Logs</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="small-grid" id="summaryStats">
+      <div class="stat">
+        <div class="num" id="totalDetections">0</div>
+        <div class="label">Total Detections</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="liveFaces">0</div>
+        <div class="label">Live Faces</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="spoofsDetected">0</div>
+        <div class="label">Spoofs Detected</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:20px">
+      <div style="flex:1">
+        <canvas id="timelineChart" height="140"></canvas>
+      </div>
+      <div style="width:360px">
+        <h4 style="text-align: center;">Recent Detections</h4>
+        <div id="recentListDashboard" style="max-height:300px;overflow:auto"></div>
+      </div>
+    </div>
+
+    <div class="footer">Summary and timeline of last 7 days.</div>
+  </div>
+</div>
+
+<script>
+// Dashboard JS
+async function updateDashboard() {
+    try {
+        const resp = await fetch('http://127.0.0.1:5000/api/recent');
+        const data = await resp.json();
+
+        // Update counts
+        document.getElementById('totalDetections').innerText = data.counts.total;
+        document.getElementById('liveFaces').innerText = data.counts.live;
+        document.getElementById('spoofsDetected').innerText = data.counts.spoof;
+
+        // Update recent detections list
+        const recentList = document.getElementById('recentListDashboard');
+        recentList.innerHTML = '';
+        data.rows.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'recent-item';
+            div.style.display = 'flex';
+            div.style.alignItems = 'center';
+            div.style.gap = '8px';
+            div.style.marginBottom = '8px';
+
+            const img = document.createElement('img');
+            img.src = item.image_path
+                ? `http://127.0.0.1:5000/uploads/${item.image_path.split('/').pop()}`
+                : '';
+            img.width = 80;
+            img.height = 60;
+            img.style.objectFit = 'cover';
+
+            const info = document.createElement('div');
+            info.innerHTML = `
+                <div style="font-weight:700">${item.label.toUpperCase()} • ${item.attack_type || ''}</div>
+                <div style="color:#777;font-size:12px">${item.timestamp}</div>
+                <div style="font-size:12px;color:#777">Confidence: ${Math.round(item.confidence*100)}%</div>
+            `;
+
+            div.appendChild(img);
+            div.appendChild(info);
+            recentList.prepend(div);
+        });
+
+        // Optional: timeline chart
+        const labels = data.timeline.map(x => x.date);
+        const chartData = data.timeline.map(x => x.count);
+        const ctx = document.getElementById('timelineChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: { labels, datasets: [{ label:'Detections', data: chartData, fill:true, tension:0.3 }] },
+            options: { plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true } } }
+        });
+
+    } catch (e) {
+        console.error('Dashboard update failed:', e);
+    }
+}
+
+// Refresh dashboard every 2 seconds
+setInterval(updateDashboard, 2000);
+updateDashboard(); // initial load
+</script>
+</body>
+</html>
