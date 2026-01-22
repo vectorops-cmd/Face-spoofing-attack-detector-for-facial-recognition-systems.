@@ -1,6 +1,8 @@
-Flask
-flask-cors
-flask-sqlalchemy
-Pillow
-numpy
-tensorflow==2.11.0    # or the TensorFlow version you trained with
+Flask==2.3.3
+flask-cors==4.0.0
+flask-sqlalchemy==3.0.5
+Pillow==9.5.0
+numpy==1.23.5
+tensorflow==2.11.0
+gunicorn==21.2.0
+opencv-python-headless==4.7.0.72
