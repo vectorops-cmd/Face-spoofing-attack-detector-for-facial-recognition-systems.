@@ -11,6 +11,7 @@ const recentList = document.getElementById('recentList');
 
 // ✅ MUST be Render backend (NOT localhost)
 const BACKEND_BASE = "https://face-spoofing-attack-detector-for-facial.onrender.com";
+
 const DETECT_ENDPOINT = `${BACKEND_BASE}/api/detect`;
 
 // -------------------- CAMERA --------------------
@@ -117,3 +118,4 @@ function escapeHtml(s) {
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])
   );
 }
+
