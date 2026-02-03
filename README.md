@@ -1,4 +1,12 @@
 Face Spoofing Attack Detector for Facial Recognition Systems
+
+How to run : 
+Initiallly create an environment :  python -m venv venv
+Then activate it : .\venv\Scripts\Activate.ps1
+Install all requirements
+and then run this command : python.app
+
+
 📌 Overview
 
 Face recognition systems are vulnerable to spoofing attacks such as printed photos, replayed videos, or screen-based impersonation. This mini project focuses on detecting face spoofing attacks to improve the reliability and security of facial recognition systems.
